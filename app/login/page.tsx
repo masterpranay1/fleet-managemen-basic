@@ -1,8 +1,13 @@
+"use client";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
+
+  const router = useRouter();
+
   return (
     <main className="flex flex-col min-h-screen bg-green-50">
       <Navbar />
@@ -17,7 +22,10 @@ export default function LoginPage() {
             <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
             <Input id="password" type="password" className="mt-1 block w-full" />
           </div>
-          <Button type="submit" className="w-full bg-green-600 hover:bg-green-700 text-white">Login</Button>
+          <Button type="submit" className="w-full bg-green-600 hover:bg-green-700 text-white" onClick={(e) => {
+            e.preventDefault();
+            router.push('/dashboard');
+          }}>Login</Button>
         </form>
       </div>
     </main>
