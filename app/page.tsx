@@ -1,14 +1,18 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import TruckImage from "@/assets/images/Truck on Highway.jpg";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar"; // Import the new Navbar component
 
 import truck3d from "@/assets/images/truck3d.png";
 import { useRouter } from "next/navigation";
+
+import useSound from "use-sound";
+// import truckHorn from "public/truck.mp3"
+
 export default function Home() {
   const router = useRouter();
+  const [play] = useSound("truck.mp3"); // Initialize useSound with the sound URL
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen">
@@ -38,7 +42,9 @@ export default function Home() {
         >
           <Button
             className="bg-green-600 hover:bg-green-700 text-white mb-4 text-base md:text-lg"
-            onClick={() => router.push("/login")}
+            onClick={() => {
+              router.push("/login")
+            }}
           >
             🚀 Get Started
           </Button>
@@ -48,6 +54,10 @@ export default function Home() {
             src={truck3d}
             alt="Fleet Management"
             className="rounded-lg mx-auto animate-none"
+            // Play sound on image click
+            onClick={() => {
+              play();
+            }}
           />
         </div>
       </section>

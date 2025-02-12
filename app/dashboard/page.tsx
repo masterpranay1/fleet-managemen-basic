@@ -19,19 +19,22 @@ import {
   PolarRadiusAxis,
   Radar,
 } from "recharts";
-import { MapContainer, TileLayer, Marker } from "react-leaflet";
+import dynamic from "next/dynamic";
 import "leaflet/dist/leaflet.css";
 
 // Import Shadcn components
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import Navbar from "@/components/Navbar";
 
+// Dynamically import MapContainer and TileLayer to avoid SSR issues
+const MapContainer = dynamic(() => import("react-leaflet").then(mod => mod.MapContainer), { ssr: false });
+const TileLayer = dynamic(() => import("react-leaflet").then(mod => mod.TileLayer), { ssr: false });
+const Marker = dynamic(() => import("react-leaflet").then(mod => mod.Marker), { ssr: false });
+
 const Dashboard = () => {
   const [vehicleData, setVehicleData] = useState<
     { lat: number; lng: number }[]
   >([]);
-  const [activeDrivers, setActiveDrivers] = useState(0);
-  const [alerts, setAlerts] = useState<{ id: number; message: string }[]>([]);
   const [fleetStats, setFleetStats] = useState({
     totalVehicles: 0,
     activeTrips: 0,
@@ -45,23 +48,12 @@ const Dashboard = () => {
       { lat: -3.746, lng: -38.524 },
       // ...more dummy data
     ]);
-    setActiveDrivers(5);
-    setAlerts([
-      { id: 1, message: "Low fuel" },
-      { id: 2, message: "Maintenance required" },
-      // ...more dummy alerts
-    ]);
     setFleetStats({ totalVehicles: 50, activeTrips: 10, warnings: 3 });
   }, []);
 
   const mapContainerStyle = {
     width: "100%",
     height: "400px",
-  };
-
-  const center = {
-    lat: 20.5937,
-    lng: 78.9629,
   };
 
   const data = [
@@ -122,8 +114,7 @@ const Dashboard = () => {
             </Card>
           </div>
           <div className="mt-4">
-            {/* @ts-ignore */}
-            <MapContainer style={mapContainerStyle} center={center} zoom={5}>
+            <MapContainer style={mapContainerStyle}>
               <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
               {vehicleData.map((vehicle, index) => (
                 <Marker key={index} position={[vehicle.lat, vehicle.lng]} />
@@ -148,13 +139,18 @@ const Dashboard = () => {
                 cx={200}
                 cy={200}
                 labelLine={false}
-                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                label={({ name, percent }) =>
+                  `${name} ${(percent * 100).toFixed(0)}%`
+                }
                 outerRadius={80}
                 fill="#8884d8"
                 dataKey="value"
               >
                 {pieData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
                 ))}
               </Pie>
             </PieChart>
@@ -170,12 +166,31 @@ const Dashboard = () => {
             </BarChart>
           </div>
           <div className="mt-4">
-            <RadarChart cx={300} cy={250} outerRadius={150} width={600} height={500} data={radarData}>
+            <RadarChart
+              cx={300}
+              cy={250}
+              outerRadius={150}
+              width={600}
+              height={500}
+              data={radarData}
+            >
               <PolarGrid />
               <PolarAngleAxis dataKey="subject" />
               <PolarRadiusAxis />
-              <Radar name="Driver A" dataKey="A" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
-              <Radar name="Driver B" dataKey="B" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.6} />
+              <Radar
+                name="Driver A"
+                dataKey="A"
+                stroke="#8884d8"
+                fill="#8884d8"
+                fillOpacity={0.6}
+              />
+              <Radar
+                name="Driver B"
+                dataKey="B"
+                stroke="#82ca9d"
+                fill="#82ca9d"
+                fillOpacity={0.6}
+              />
             </RadarChart>
           </div>
         </div>
