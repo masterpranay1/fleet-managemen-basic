@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import TruckImage from "@/assets/images/Truck on Highway.jpg";
 import { motion } from "framer-motion";
+import Navbar from "@/components/Navbar"; // Import the new Navbar component
 
 import truck3d from "@/assets/images/truck3d.png";
 // import truckSound from "@/assets/sound/truck.mp3"
@@ -10,22 +11,7 @@ import truck3d from "@/assets/images/truck3d.png";
 export default function Home() {
   return (
     <main className="flex flex-col items-center justify-center min-h-screen">
-      <nav className="w-full bg-white shadow-md sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center">
-              <h1 className="text-xl font-bold text-green-600">
-                🚚 Fleet Management
-              </h1>
-            </div>
-            <div>
-              <Button className="bg-green-600 hover:bg-green-700 text-white">
-                Login
-              </Button>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Navbar /> {/* Use the Navbar component */}
 
       <section className="flex flex-col items-center justify-center flex-1 text-center p-8 bg-green-100 w-full pt-12">
         <motion.h2
