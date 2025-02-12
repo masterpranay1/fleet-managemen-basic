@@ -6,13 +6,13 @@ import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar"; // Import the new Navbar component
 
 import truck3d from "@/assets/images/truck3d.png";
-// import truckSound from "@/assets/sound/truck.mp3"
-
+import { useRouter } from "next/navigation";
 export default function Home() {
+  const router = useRouter();
+
   return (
     <main className="flex flex-col items-center justify-center min-h-screen">
       <Navbar /> {/* Use the Navbar component */}
-
       <section className="flex flex-col items-center justify-center flex-1 text-center p-8 bg-green-100 w-full pt-12">
         <motion.h2
           className="text-4xl md:text-5xl font-bold text-green-600 mb-4"
@@ -36,7 +36,10 @@ export default function Home() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.4 }}
         >
-          <Button className="bg-green-600 hover:bg-green-700 text-white mb-4 text-base md:text-lg">
+          <Button
+            className="bg-green-600 hover:bg-green-700 text-white mb-4 text-base md:text-lg"
+            onClick={() => router.push("/login")}
+          >
             🚀 Get Started
           </Button>
         </motion.div>
